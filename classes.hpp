@@ -9,16 +9,14 @@ class ExprNode
 public:
     // virtual eval that is implented differently in various derived classes
     virtual double eval() = 0;
-    //virtual derivative function to implement in derived classes
+    // virtual derivative function to implement in derived classes
     virtual std::shared_ptr<ExprNode> derivative(std::string var) = 0;
     // overloaded << operation, that will call the virtual print in the derived classes
-    friend std::ostream& operator<<(std::ostream& os, const ExprNode& node)
+    friend std::ostream &operator<<(std::ostream &os, const ExprNode &node)
     {
         return node.print(os);
     }
-    virtual std::ostream& print(std::ostream &os) const = 0;
-
-
+    virtual std::ostream &print(std::ostream &os) const = 0;
 };
 
 using node_ptr = std::shared_ptr<ExprNode>;
@@ -33,8 +31,8 @@ public:
 
     node_ptr derivative(std::string var) override { return std::make_shared<ConstantNode>(0.0); }
 
+    std::ostream &print(std::ostream &os) const override { return os << value; }
 
-    std::ostream& print(std::ostream& os) const override { return os << value; }
 private:
     double value;
 };
@@ -56,10 +54,12 @@ public:
     // 1 if its the variable, otherwise 0
     node_ptr derivative(std::string var) override
     {
-        if (var == name) {
+        if (var == name)
+        {
             return std::make_shared<ConstantNode>(1.0);
         }
-        else {
+        else
+        {
             return std::make_shared<ConstantNode>(0.0);
         }
     }
@@ -68,9 +68,8 @@ public:
     {
         symbol_table[name] = value;
     }
-    std::ostream& print(std::ostream& os) const override { return os << name; }
-        static std::map<std::string, double> symbol_table;
-
+    std::ostream &print(std::ostream &os) const override { return os << name; }
+    static std::map<std::string, double> symbol_table;
 
 private:
     std::string name;
@@ -95,8 +94,7 @@ public:
         return std::make_shared<AddNode>(left->derivative(var), right->derivative(var));
     }
 
-    std::ostream& print(std::ostream& os) const override { return os << "(" << *left << "+" << *right << ")"; }
-
+    std::ostream &print(std::ostream &os) const override { return os << "(" << *left << "+" << *right << ")"; }
 
 private:
     node_ptr left, right;
@@ -117,7 +115,7 @@ public:
         return std::make_shared<SubNode>(left->derivative(var), right->derivative(var));
     }
 
-    std::ostream& print(std::ostream& os) const override { return os << "(" << *left << "-" << *right << ")"; }
+    std::ostream &print(std::ostream &os) const override { return os << "(" << *left << "-" << *right << ")"; }
 
 private:
     node_ptr left, right;
@@ -141,7 +139,7 @@ public:
             std::make_shared<MulNode>(left, right->derivative(variable)));
     }
 
-    std::ostream& print(std::ostream& os) const override { return os << "(" << *left << "*" << *right << ")"; }
+    std::ostream &print(std::ostream &os) const override { return os << "(" << *left << "*" << *right << ")"; }
 
 private:
     node_ptr left, right;
@@ -158,7 +156,7 @@ public:
         return left->eval() / denominator;
     }
 
-        node_ptr derivative(std::string variable) override
+    node_ptr derivative(std::string variable) override
     {
         // Apply the quotient rule: (u / v)' = (u'v - uv') / v^2
         return std::make_shared<DivNode>(
@@ -168,8 +166,7 @@ public:
             std::make_shared<MulNode>(right, right));
     }
 
-    std::ostream& print(std::ostream& os) const override { return os << "(" << *left << "*" << *right << ")"; }
-
+    std::ostream &print(std::ostream &os) const override { return os << "(" << *left << "*" << *right << ")"; }
 
 private:
     node_ptr left, right;
