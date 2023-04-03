@@ -4,13 +4,12 @@ double evaluate_expression_tree(std::shared_ptr<ExprNode> node);
 
 using node_ptr = std::shared_ptr<ExprNode>;
 
-
 int main()
 {
     
-    VariableNode::set_value("Xray", 100.0);
-    VariableNode::set_value("Yellow", 10.0);
-    VariableNode::set_value("Zebra", 1.0);
+    VariableNode::set_value("Xray", 1.0);
+    VariableNode::set_value("Yellow", 2.0);
+    VariableNode::set_value("Zebra", 3.0);
 
     node_ptr node = std::make_shared<AddNode>(
         std::make_shared<MulNode>(
