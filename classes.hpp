@@ -6,6 +6,7 @@
 // base class
 class ExprNode
 {
+    
 public:
     // virtual eval that is implented differently in various derived classes
     virtual double eval() = 0;
